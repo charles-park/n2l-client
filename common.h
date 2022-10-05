@@ -14,6 +14,7 @@
 #define	__COMMON_H__
 
 //------------------------------------------------------------------------------
+#include <arpa/inet.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -28,11 +29,14 @@
 #include <time.h>
 #include <unistd.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <linux/sockios.h>
+#include <netinet/ether.h>
+#include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <sys/sysinfo.h>
+#include <sys/types.h>
 
 //------------------------------------------------------------------------------
 // Function prototype
