@@ -145,6 +145,8 @@ int adc_test_func (char *msg, char *resp_msg)
 		else
 			sprintf (resp_msg, "%d,%s",
 				adc[item].status, adc[item].status ? "PASS" : "FAIL");
+
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
 	}
 	info ("msg null pointer err!\n");

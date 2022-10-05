@@ -148,30 +148,26 @@ int fwrite_str (char *filename, char *wstr)
 }
 
 //------------------------------------------------------------------------------
+#define CONFIG_APP_FILE     "app.cfg"
+
 int find_appcfg_data (char *fkey, char *fdata)
 {
 	FILE *fp;
 	char read_line[256];
 	bool appcfg = false;
 	int count = 0;
-
 	if (access (CONFIG_APP_FILE, R_OK) == 0) {
 		if ((fp = fopen (CONFIG_APP_FILE, "r")) != NULL) {
 			memset (read_line, 0x00, sizeof(read_line));
-			while ((fgets(read_line, sizeof(read_line), fp) != NULL)) {
-				if (!strncmp (read_line, "ODROID-APP-CONFIG", sizeof("ODROID-APP-CONFIG")-1)) {
-					appcfg = true;
-					break;
-				}
-				memset (read_line, 0x00, sizeof(read_line));
-			}
-			fclose (fp);
-		}
-		if (!appcfg)	return -1;
-
-		if ((fp = fopen (CONFIG_APP_FILE, "r")) != NULL) {
-			memset (read_line, 0x00, sizeof(read_line));
 			while (fgets(read_line, sizeof(read_line), fp) != NULL) {
+
+				if (!appcfg) {
+					appcfg = strncmp ("ODROID-APP-CONFIG", read_line,
+									strlen(read_line)-1) == 0 ? true : false;
+					memset (read_line, 0x00, sizeof(read_line));
+					continue;
+				}
+
 				char *ptr = strstr (read_line, fkey);
 				if (ptr != NULL) {
 					ptr = strstr (ptr +1, "=");

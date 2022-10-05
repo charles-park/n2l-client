@@ -105,6 +105,7 @@ int led_test_func (char *msg, char *resp_msg)
 		ret = fwrite_bool (led[ctrl_led].filename, led[ctrl_led].status);
 		/* resp msg : [status, led status, adc2, ] */
 		sprintf (resp_msg, "%d,%d", ret, led[ctrl_led].status);
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
 
 	}

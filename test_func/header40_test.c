@@ -260,6 +260,7 @@ int header40_test_func (char *msg, char *resp_msg)
 
 		/* resp msg : [status, get_speed-read mb/s */
 		sprintf (resp_msg, "%d,%d",	header40_set_pattern(item), item);
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
 	}
 	info ("msg null pointer err!\n");

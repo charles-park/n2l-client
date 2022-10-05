@@ -55,12 +55,22 @@ typedef struct b_item__t {
 	char            s_dfl[ITEM_STR_MAX];
 }	b_item_t;
 
+typedef struct i_item__t {
+	int				uid;
+	char			group[ITEM_STR_MAX];
+	char            item[ITEM_STR_MAX];
+	bool			is_info;
+}	i_item_t;
+
 typedef struct ui_group__t {
 	int             f_type;
     fb_color_u      fc, bc, lc;
 
 	int				b_item_cnt;
 	b_item_t		b_item[ITEM_COUNT_MAX];
+
+	int				i_item_cnt;
+	i_item_t		i_item[ITEM_COUNT_MAX];
 }	ui_grp_t;
 
 //------------------------------------------------------------------------------

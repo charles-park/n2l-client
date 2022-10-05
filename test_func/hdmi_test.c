@@ -88,7 +88,8 @@ int hdmi_test_func (char *msg, char *resp_msg)
 			return -1;
 		}
 		/* resp msg : [status,] */
-		sprintf (resp_msg, "%d", hdmi[item].status);
+		sprintf (resp_msg, "%d,%s", hdmi[item].status, hdmi[item].status ? "PASS" : "FAIL");
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
 	}
 	err ("msg null pointer err!\n");

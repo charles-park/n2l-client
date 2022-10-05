@@ -221,6 +221,7 @@ int usb_test_func (char *msg, char *resp_msg)
 			sprintf (resp_msg, "%d,%d MB/s",
 				usb[item].status, usb[item].is_mass ? usb[item].read_speed : 0);
 
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
 	}
 	info ("msg null pointer err!\n");

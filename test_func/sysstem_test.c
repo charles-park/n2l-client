@@ -119,6 +119,7 @@ int system_test_func (char *msg, char *resp_msg)
 			info ("err : unknown msg! %s\n", ptr);
 			return -1;
 		}
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return 0;
 	}
 	info ("msg null pointer err! %s\n", ptr);

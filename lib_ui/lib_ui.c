@@ -44,6 +44,7 @@ static   void _ui_update_r       (fb_info_t *fb, rect_item_t *r_item);
 static   void _ui_update_s       (fb_info_t *fb, string_item_t *s_item, int x, int y);
 static   void _ui_parser_cmd_C   (char *buf, fb_info_t *fb, ui_grp_t *ui_grp);
 static   void _ui_parser_cmd_B   (char *buf, fb_info_t *fb, ui_grp_t *ui_grp);
+static   void _ui_parser_cmd_I   (char *buf, fb_info_t *fb, ui_grp_t *ui_grp);
 static   void _ui_str_pos_xy     (rect_item_t *r_item, string_item_t *s_item);
 static   void *_ui_find_item     (ui_grp_t *ui_grp, int fid);
 static   void _ui_update         (fb_info_t *fb, ui_grp_t *ui_grp, int id);
@@ -56,6 +57,7 @@ static   void _ui_update         (fb_info_t *fb, ui_grp_t *ui_grp, int id);
          void ui_update          (fb_info_t *fb, ui_grp_t *ui_grp, int id);
          void ui_close           (ui_grp_t *ui_grp);
          ui_grp_t *ui_init       (fb_info_t *fb, const char *cfg_filename);
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 /*
@@ -207,6 +209,43 @@ static void _ui_parser_cmd_B (char *buf, fb_info_t *fb, ui_grp_t *ui_grp)
 
    item_cnt++;
    ui_grp->b_item_cnt = item_cnt;
+}
+
+//------------------------------------------------------------------------------
+static void _ui_parser_cmd_I (char *buf, fb_info_t *fb, ui_grp_t *ui_grp)
+{
+   int item_cnt = ui_grp->i_item_cnt;
+   char *ptr = strtok (buf, ",");
+
+   if ((ptr = strtok (NULL, ",")) != NULL)
+      ui_grp->i_item[item_cnt].uid = atoi(ptr);
+
+   /* 문자열이 없거나 앞부분의 공백이 있는 경우 제거 */
+   if ((ptr = strtok (NULL, ",")) != NULL) {
+      int slen = strlen(ptr);
+
+      while ((*ptr == 0x20) && slen--)
+         ptr++;
+
+      strncpy(ui_grp->i_item[item_cnt].group, ptr, slen);
+   }
+   
+   /* 문자열이 없거나 앞부분의 공백이 있는 경우 제거 */
+   if ((ptr = strtok (NULL, ",")) != NULL) {
+      int slen = strlen(ptr);
+
+      while ((*ptr == 0x20) && slen--)
+         ptr++;
+
+      strncpy(ui_grp->i_item[item_cnt].item, ptr, slen);
+   }
+
+   ui_grp->i_item[item_cnt].is_info = true;
+   if ((ptr = strtok (NULL, ",")) != NULL)
+      ui_grp->i_item[item_cnt].is_info = (atoi(ptr) == 1) ? true : false;
+
+   item_cnt++;
+   ui_grp->i_item_cnt = item_cnt;
 }
 
 //------------------------------------------------------------------------------
@@ -425,6 +464,7 @@ ui_grp_t *ui_init (fb_info_t *fb, const char *cfg_filename)
       switch(buf[0]) {
          case  'C':  _ui_parser_cmd_C (buf, fb, ui_grp); break;
          case  'B':  _ui_parser_cmd_B (buf, fb, ui_grp); break;
+         case  'I':  _ui_parser_cmd_I (buf, fb, ui_grp); break;
          default :
             err("Unknown parser command! cmd = %c\n", buf[0]);
          case  '#':  case  '\n':

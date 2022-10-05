@@ -102,6 +102,7 @@ int audio_test_func (char *msg, char *resp_msg)
 			pthread_mutex_unlock(&audio.mutex);
 			usleep(100);
 			sprintf(resp_msg, "%d,%d", audio.enable, audio.play_time);
+			info ("msg = %s, resp = %s\n", msg, resp_msg);
 			return 0;
 		}
 		err ("null pointer msg\n");

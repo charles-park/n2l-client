@@ -76,6 +76,7 @@ int fan_test_func (char *msg, char *resp_msg)
 		}
 		/* resp msg : [status, control status] */
 		sprintf (resp_msg, "%d,%d", ret, fan.status);
+		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
 	}
 	err ("msg null pointer err!\n");
