@@ -53,10 +53,10 @@ void hdmi_test_init (void)
 	}
 
 	if (access (hdmi[HDMI_EDID].fname, R_OK) == 0) {
-		char	rdata[16];
-		if (!fread_line (hdmi[HDMI_EDID].fname, rdata)) {
+		char	rdata[20];
+		if (!fread_line (hdmi[HDMI_EDID].fname, rdata, sizeof(rdata))) {
 			// HDMI_EDID_PASS string is edid pass.
-			if (!strncmp(rdata, HDMI_EDID_PASS, sizeof(HDMI_EDID_PASS)))
+			if (!strncmp(rdata, HDMI_EDID_PASS, sizeof(HDMI_EDID_PASS)-1))
 				hdmi[HDMI_EDID].status = true;
 		}
 	}

@@ -51,16 +51,16 @@ void adc_test_init (void)
 	{
 		char int_str[8];
 
-		memset (int_str, 0x00, sizeof(int_str));
-
 		if (find_appcfg_data ("ADC_37_FILENAME",  adc[ADC_37].fname))
 			sprintf(adc[ADC_37].fname, "%s", ADC_37_FILENAME);
 
+		memset (int_str, 0x00, sizeof(int_str));
 		if (find_appcfg_data ("ADC_37_MAX",  int_str))
 			adc[ADC_37].max = ADC_37_IN_MAX;
 		else
 			adc[ADC_37].max = atoi (int_str);
 
+		memset (int_str, 0x00, sizeof(int_str));
 		if (find_appcfg_data ("ADC_37_MIN",  int_str))
 			adc[ADC_37].min = ADC_37_IN_MIN;
 		else
@@ -69,11 +69,13 @@ void adc_test_init (void)
 		if (find_appcfg_data ("ADC_40_FILENAME",  adc[ADC_40].fname))
 			sprintf(adc[ADC_40].fname, "%s", ADC_40_FILENAME);
 
+		memset (int_str, 0x00, sizeof(int_str));
 		if (find_appcfg_data ("ADC_40_MAX",  int_str))
 			adc[ADC_40].max = ADC_40_IN_MAX;
 		else
 			adc[ADC_40].max = atoi (int_str);
 
+		memset (int_str, 0x00, sizeof(int_str));
 		if (find_appcfg_data ("ADC_40_MIN",  int_str))
 			adc[ADC_40].min = ADC_40_IN_MIN;
 		else

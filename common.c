@@ -20,7 +20,7 @@ char 	*remove_space_str 	(char *str);
 char	*toupperstr			(char *str);
 char	*tolowerstr			(char *str);
 int		fread_int       	(char *filename);
-int		fread_line       	(char *filename, char *line);
+int 	fread_line          (char *filename, char *line, int l_size);
 int		fwrite_bool			(char *filename, char status);
 int 	fwrite_str 			(char *filename, char *wstr);
 int		find_appcfg_data	(char *fkey, char *fdata);
@@ -85,7 +85,7 @@ int fread_int (char *filename)
 }
 
 //------------------------------------------------------------------------------
-int fread_line (char *filename, char *line)
+int fread_line (char *filename, char *line, int l_size)
 {
 	FILE 	*fp;
 
@@ -94,7 +94,7 @@ int fread_line (char *filename, char *line)
 
 	// adc raw value get
 	if ((fp = fopen(filename, "r")) != NULL) {
-		fgets (line, sizeof(line), fp);
+		fgets (line, l_size, fp);
 		fclose(fp);
 	}
 	info ("filename = %s, rdata = %s\n", filename, line);

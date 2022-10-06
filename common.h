@@ -47,7 +47,8 @@ extern	char *toupperstr        (char *str);
 extern	char *tolowerstr        (char *str);
 
 extern  int fread_int           (char *filename);
-extern  int fread_line          (char *filename, char *line);
+extern  int fread_line          (char *filename, char *line, int l_size);
+
 extern  int fwrite_bool			(char *filename, char status);
 extern  int fwrite_str 			(char *filename, char *wstr);
 extern  int find_appcfg_data    (char *fkey, char *fdata);
