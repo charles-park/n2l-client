@@ -159,9 +159,6 @@ bool ptc_grp_init (ptc_grp_t *ptc_grp, __u8 ptc_count)
 
     if (ptc_grp->p != NULL) {
         memset (ptc_grp->p, 0x00, sizeof(ptc_func_t) * ptc_count);
-        /* Create pthread for tx / rx */
-        pthread_create(&ptc_grp->rx_thread, NULL, rx_thread_func, ptc_grp);
-        pthread_create(&ptc_grp->tx_thread, NULL, tx_thread_func, ptc_grp);
         return  true;
     }
     return false;
@@ -266,6 +263,9 @@ ptc_grp_t *uart_init (const char *dev_name, speed_t baud)
             free (ptc_grp);
             return NULL;
         }
+        /* Create pthread for tx / rx */
+        pthread_create(&ptc_grp->rx_thread, NULL, rx_thread_func, ptc_grp);
+        pthread_create(&ptc_grp->tx_thread, NULL, tx_thread_func, ptc_grp);
         return ptc_grp;
     }
     return NULL;

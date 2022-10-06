@@ -28,7 +28,7 @@
 // https://docs.google.com/spreadsheets/d/18J4B4bqgUbMBA8XeoDkMcKPVEAeNCP2jQm5TOlgKUAo/edit#gid=744952288
 //
 //------------------------------------------------------------------------------
-int protocol_check(ptc_var_t *var)
+int protocol_check (ptc_var_t *var)
 {
 	/* head & tail check with protocol size */
 	if(var->buf[(var->p_sp + var->size -1) % var->size] != '#')	return 0;
@@ -37,7 +37,7 @@ int protocol_check(ptc_var_t *var)
 }
 
 //------------------------------------------------------------------------------
-int protocol_catch(ptc_var_t *var)
+int protocol_catch (ptc_var_t *var)
 {
 	char cmd = var->buf[(var->p_sp + 1) % var->size];
 
@@ -52,31 +52,41 @@ int protocol_catch(ptc_var_t *var)
 }
 
 //------------------------------------------------------------------------------
-void send_msg (ptc_grp_t *puart, char *uid, char *resp_msg)
+void protocol_msg_send (ptc_grp_t *puart, char ack, char *uid, char *resp_m)
 {
-	int len = sizeof(client_protocol_u), i;
-	char *ptr;
-	client_protocol_u	client;
+	int len = sizeof(send_protocol_u), i;
+	char *ptr, resp_msg[20];
+	send_protocol_u	send;
 
-	memset(&client, ' ', sizeof(client_protocol_u));
+	memset(&send, ' ', sizeof(send_protocol_u));
+	memset(resp_msg, 0x00, sizeof(resp_msg));
+	strncpy (resp_msg, resp_m, sizeof(resp_msg));
 
 	if ((ptr = strtok (resp_msg, ",")) != NULL) {
-		client.p.status = *ptr;
-		if ((ptr = strtok (NULL, ",")) != NULL)
-			sprintf (client.p.data, "%s", ptr);
+		send.p.status = *ptr;
+		if ((ptr = strtok (NULL, ",")) != NULL) {
+			char data[sizeof(send.p.data) +1];
+			sprintf (data, "%16s", ptr);
+			strncpy (send.p.data, data, sizeof(send.p.data));
+		}
 	}
-	strncpy(client.p.uid, uid, sizeof(client.p.uid));
+	strncpy(send.p.uid, uid, sizeof(send.p.uid));
 
-	client.p.head = '@';	client.p.tail = '#';
-	client.p.resp = 'O';	// Okay
+	send.p.head = '@';	send.p.tail = '#';
+	send.p.resp = ack;	// Resp cmd
 
-	info ("%s : %s\n", __func__, client.bytes);
-	for (i = 0; i < sizeof(client_protocol_u); i++)
-		queue_put(&puart->tx_q, &client.bytes[i]);
+	for (i = 0; i < sizeof(send_protocol_u); i++)
+		queue_put(&puart->tx_q, &send.bytes[i]);
+
+	{
+		char LF = '\n', CR = '\r';
+		queue_put(&puart->tx_q, &LF);
+		queue_put(&puart->tx_q, &CR);
+	}
 }
 
 //------------------------------------------------------------------------------
-int receive_msg_check (ptc_grp_t *puart, char *recv_msg)
+int protocol_msg_check (ptc_grp_t *puart, char *recv_msg)
 {
 	__u8 idata, p_cnt;
 
@@ -91,6 +101,7 @@ int receive_msg_check (ptc_grp_t *puart, char *recv_msg)
 
 			puart->p[p_cnt].var.pass = false;
 			puart->p[p_cnt].var.open = true;
+
 			/* uuid(3) + group(10) + item(10) char size = 23 */
 			for (i = 0; i < 23; i++)
 				// uuid start position is 2

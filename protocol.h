@@ -16,10 +16,10 @@
 #include "typedefs.h"
 
 //------------------------------------------------------------------------------
-/* Server to Client data size is 10 bytes */
+/* Data receive Server to Client : protocol size is 32 bytes */
 //------------------------------------------------------------------------------
 #pragma packet(1)
-typedef struct server_protocol__t {
+typedef struct recv_protocol__t {
 	/* @ : start protocol signal */
 	__s8	head;
 
@@ -37,18 +37,18 @@ typedef struct server_protocol__t {
 	__s8	reserved[6];
 	/* # : end protocol signal */
 	__s8	tail;
-}	server_protocol_t;
+}	recv_protocol_t;
 
 #pragma packet(1)
-typedef union server_protocol__u {
-	server_protocol_t 	p;
-	__u8				bytes[sizeof(server_protocol_t)];
-}	server_protocol_u;
+typedef union recv_protocol__u {
+	recv_protocol_t 	p;
+	__u8				bytes[sizeof(recv_protocol_t)];
+}	recv_protocol_u;
 
 //------------------------------------------------------------------------------
-/* Client to Server data size is 16 bytes */
+/* Send data Client to Server : protocol size is 32 bytes */
 #pragma packet(1)
-typedef struct client_protocol__t {
+typedef struct send_protocol__t {
 	/* @ : start protocol signal */
 	__s8	head;
 
@@ -67,21 +67,21 @@ typedef struct client_protocol__t {
 	__s8	reserved[9];
 	/* # : end protocol signal */
 	__s8	tail;
-}	client_protocol_t;
+}	send_protocol_t;
 
 #pragma packet(1)
-typedef union client_protocol__u {
-	client_protocol_t 	p;
-	__u8				bytes[sizeof(client_protocol_t)];
-}	client_protocol_u;
+typedef union send_protocol__u {
+	send_protocol_t 	p;
+	__u8				bytes[sizeof(send_protocol_t)];
+}	send_protocol_u;
 
 //------------------------------------------------------------------------------
 // function prototype define
 //------------------------------------------------------------------------------
 extern	int 	protocol_catch		(ptc_var_t *var);
 extern	int 	protocol_check		(ptc_var_t *var);
-extern	int 	receive_msg_check 	(ptc_grp_t *puart, char *recv_msg);
-extern	void 	send_msg 			(ptc_grp_t *puart, char *uid, char *resp_msg);
+extern	int 	protocol_msg_check 	(ptc_grp_t *puart, char *recv_msg);
+extern	void 	protocol_msg_send	(ptc_grp_t *puart, char ack, char *uid, char *resp_m);
 
 //------------------------------------------------------------------------------
 #endif	// #define	__PROTOCOL_H__

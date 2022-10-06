@@ -153,7 +153,7 @@ int fwrite_str (char *filename, char *wstr)
 int find_appcfg_data (char *fkey, char *fdata)
 {
 	FILE *fp;
-	char read_line[256];
+	char read_line[256], *ptr;
 	bool appcfg = false;
 	int count = 0;
 	if (access (CONFIG_APP_FILE, R_OK) == 0) {
@@ -167,17 +167,17 @@ int find_appcfg_data (char *fkey, char *fdata)
 					memset (read_line, 0x00, sizeof(read_line));
 					continue;
 				}
+				if (read_line[0] != '#') {
+					if ((ptr = strstr (read_line, fkey)) != NULL) {
+						ptr = strstr (ptr +1, "=");
+						ptr = ptr +1;
+						while ((ptr != NULL) && (*ptr == ' '))	ptr++;
 
-				char *ptr = strstr (read_line, fkey);
-				if (ptr != NULL) {
-					ptr = strstr (ptr +1, "=");
-					ptr = ptr +1;
-					while ((ptr != NULL) && (*ptr == ' '))	ptr++;
-
-					strncpy (fdata, ptr, strlen (ptr) -1);
-					//info ("%s : (%d) %s\n", __func__, (int)strlen(fdata), fdata);
-					fclose (fp);
-					return 0;
+						strncpy (fdata, ptr, strlen (ptr) -1);
+						//info ("%s : (%d) %s\n", __func__, (int)strlen(fdata), fdata);
+						fclose (fp);
+						return 0;
+					}
 				}
 				memset (read_line, 0x00, sizeof(read_line));
 			}

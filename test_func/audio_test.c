@@ -81,13 +81,13 @@ int audio_test_func (char *msg, char *resp_msg)
 			memset (audio.filename, 0x00, sizeof (audio.filename));
 			if			(!strncmp(ptr, "L_CH", sizeof("L_CH"))) {
 				if (access (audio.lch_fname, R_OK)) {
-					err ("%s not found.", audio.lch_fname);
+					err ("%s not found.\n", audio.lch_fname);
 					return -1;
 				}
 				sprintf (audio.filename, "%s", audio.lch_fname);
 			} else if 	(!strncmp(ptr, "R_CH", sizeof("R_CH"))) {
 				if (access (audio.rch_fname, R_OK)) {
-					err ("%s not found.", audio.rch_fname);
+					err ("%s not found.\n", audio.rch_fname);
 					return -1;
 				}
 				sprintf (audio.filename, "%s", audio.rch_fname);
