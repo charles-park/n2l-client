@@ -14,14 +14,15 @@ project/n2l/ubuntu-22.04-4.9-minimal-odroid-n2l-20220913.img
 3. apt install build-essential git overlayroot vim ssh
 4. odroid-tweaks[3088]: /bin/odroid-tweaks: line 8: [file disable]
 5. /media/boot/config.ini -> overlays all disable
-6. /media/boot/boot.ini -> disable console (ttyS0)
-7. git clone https://github.com/charles-park/n2l-client
-8. project build : make
-9. service install : n2l-client/service/install.sh
-10. emmc resize : ubuntu pc used disk util (4608 MB)
-11. image dump : dd if=/dev/sda of=./odroid-n2l-client.img bs=512M count=10
-12. test image
-13. overlay enable
+6. /media/boot/config.ini -> hdmi (1080p설정), EDID 참조: https://en.wikipedia.org/wiki/Extended_Display_Identification_Data 
+7. /media/boot/boot.ini -> disable console (ttyS0)
+8. git clone https://github.com/charles-park/n2l-client
+9. project build : make
+10. service install : n2l-client/service/install.sh
+11. emmc resize : ubuntu pc used disk util (4608 MB)
+12. image dump : dd if=/dev/sda of=./odroid-n2l-client.img bs=512M count=10
+13. test image
+14. overlay enable
 ```
 root@odroid:~# update-initramfs -c -k $(uname -r)
 update-initramfs: Generating /boot/initrd.img-4.9.277-75
@@ -40,7 +41,7 @@ vi /etc/overlayroot.conf
 overlayroot_cfgdisk="disabled"
 overlayroot="tmpfs"
 ```
-14. overlay modified/disable  
+15. overlay modified/disable  
 ```
 overlayroot.conf 파일의 overlayroot=”tmpfs”를 overlayroot=””로 변경합니다.
 vi /etc/overlayroot.conf
@@ -53,7 +54,7 @@ root@hirsute-server:/#
 
 [disable overlayroot]
 ```
-14. final image dump  
+16. final image dump  
 
 
 
