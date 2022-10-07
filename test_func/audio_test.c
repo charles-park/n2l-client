@@ -79,20 +79,20 @@ int audio_test_func (char *msg, char *resp_msg)
 			ptr = toupperstr(ptr);
 
 			memset (audio.filename, 0x00, sizeof (audio.filename));
-			if			(!strncmp(ptr, "L_CH", sizeof("L_CH"))) {
+			if			(!strncmp(ptr, "L_CH", sizeof("L_CH")-1)) {
 				if (access (audio.lch_fname, R_OK)) {
 					err ("%s not found.\n", audio.lch_fname);
 					return -1;
 				}
 				sprintf (audio.filename, "%s", audio.lch_fname);
-			} else if 	(!strncmp(ptr, "R_CH", sizeof("R_CH"))) {
+			} else if 	(!strncmp(ptr, "R_CH", sizeof("R_CH")-1)) {
 				if (access (audio.rch_fname, R_OK)) {
 					err ("%s not found.\n", audio.rch_fname);
 					return -1;
 				}
 				sprintf (audio.filename, "%s", audio.rch_fname);
 			}	else {
-				err ("unknown msg! msg = %s\n", msg);
+				info ("%s : msg unknown %s\n", __func__,  ptr);
 				return -1;
 			}
 

@@ -330,7 +330,6 @@ int main(int argc, char **argv)
 #if defined(UART_MSG_TEST)
 	uart_msg_test (&client);
 #endif
-
 	while (true) {
 		client_alive (&client);
 

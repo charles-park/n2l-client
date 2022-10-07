@@ -85,16 +85,16 @@ int led_test_func (char *msg, char *resp_msg)
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
 
-		if			(!strncmp(ptr, "ALIVE_ON", sizeof("ALIVE_ON"))) {
+		if			(!strncmp(ptr, "ALIVE_ON", sizeof("ALIVE_ON")-1)) {
 			ctrl_led = LED_ALIVE;	led[ctrl_led].status = true;
-		} else if	(!strncmp(ptr, "ALIVE_OFF", sizeof("ALIVE_OFF"))) {
+		} else if	(!strncmp(ptr, "ALIVE_OFF", sizeof("ALIVE_OFF")-1)) {
 			ctrl_led = LED_ALIVE;	led[ctrl_led].status = false;
-		} else if	(!strncmp(ptr, "POWER_ON", sizeof("POWER_ON"))) {
+		} else if	(!strncmp(ptr, "POWER_ON", sizeof("POWER_ON")-1)) {
 			ctrl_led = LED_POWER;	led[ctrl_led].status = true;
-		} else if	(!strncmp(ptr, "POWER_OFF", sizeof("POWER_OFF"))) {
+		} else if	(!strncmp(ptr, "POWER_OFF", sizeof("POWER_OFF")-1)) {
 			ctrl_led = LED_POWER;	led[ctrl_led].status = false;
 		} else {
-			info ("msg unknown");
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 		if (!led[ctrl_led].is_file) {

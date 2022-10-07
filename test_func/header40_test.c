@@ -245,16 +245,16 @@ int header40_test_func (char *msg, char *resp_msg)
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
 
-		if 		(!strncmp(ptr, "PATTERN_0", sizeof("PATTERN_0")))
+		if 		(!strncmp(ptr, "PATTERN_0", sizeof("PATTERN_0")-1))
 			item = ITEM_PATTERN_0;
-		else if	(!strncmp(ptr, "PATTERN_1", sizeof("PATTERN_1")))
+		else if	(!strncmp(ptr, "PATTERN_1", sizeof("PATTERN_1")-1))
 			item = ITEM_PATTERN_1;
-		else if	(!strncmp(ptr, "PATTERN_2", sizeof("PATTERN_2")))
+		else if	(!strncmp(ptr, "PATTERN_2", sizeof("PATTERN_2")-1))
 			item = ITEM_PATTERN_2;
-		else if	(!strncmp(ptr, "PATTERN_3", sizeof("PATTERN_3")))
+		else if	(!strncmp(ptr, "PATTERN_3", sizeof("PATTERN_3")-1))
 			item = ITEM_PATTERN_3;
 		else {
-			info ("err : unknown msg! %s\n", ptr);
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 

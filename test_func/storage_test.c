@@ -127,10 +127,10 @@ int storage_test_func (char *msg, char *resp_msg)
 
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
-		if      (!strncmp(ptr, "EMMC", sizeof("EMMC")))	item = ITEM_STORAGE_EMMC;
-		else if	(!strncmp(ptr, "SD",   sizeof("SD")))	item = ITEM_STORAGE_SD;
+		if      (!strncmp(ptr, "EMMC", sizeof("EMMC")-1))	item = ITEM_STORAGE_EMMC;
+		else if	(!strncmp(ptr, "SD",   sizeof("SD")  -1))	item = ITEM_STORAGE_SD;
 		else {
-			info ("msg unknown");
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 		storage[item].status = storage[item].speed > storage[item].check_speed ? 1 : 0;

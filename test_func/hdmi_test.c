@@ -79,12 +79,12 @@ int hdmi_test_func (char *msg, char *resp_msg)
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
 
-		if		(!strncmp(ptr, "HPD", sizeof("HPD")))
+		if		(!strncmp(ptr, "HPD", sizeof("HPD")-1))
 			item = HDMI_HPD;
-		else if (!strncmp(ptr, "EDID", sizeof("EDID")))
+		else if (!strncmp(ptr, "EDID", sizeof("EDID")-1))
 			item = HDMI_EDID;
 		else {
-			err ("Unknown msg! %s\n", ptr);
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 		/* resp msg : [status,] */

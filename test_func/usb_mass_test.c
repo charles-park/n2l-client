@@ -194,24 +194,24 @@ int usb_test_func (char *msg, char *resp_msg)
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
 
-		if 			(!strncmp(ptr, "L_DN_PORT", sizeof("L_DN_PORT"))) {
+		if 			(!strncmp(ptr, "L_DN_PORT", sizeof("L_DN_PORT")-1)) {
 			item = ITEM_USB_L_DN;	item_is_port = true;
-		} else  if	(!strncmp(ptr, "L_UP_PORT", sizeof("L_UP_PORT"))) {
+		} else  if	(!strncmp(ptr, "L_UP_PORT", sizeof("L_UP_PORT")-1)) {
 			item = ITEM_USB_L_UP;	item_is_port = true;
-		} else  if	(!strncmp(ptr, "R_DN_PORT", sizeof("R_DN_PORT"))) {
+		} else  if	(!strncmp(ptr, "R_DN_PORT", sizeof("R_DN_PORT")-1)) {
 			item = ITEM_USB_R_DN;	item_is_port = true;
-		} else  if	(!strncmp(ptr, "R_UP_PORT", sizeof("R_UP_PORT"))) {
+		} else  if	(!strncmp(ptr, "R_UP_PORT", sizeof("R_UP_PORT")-1)) {
 			item = ITEM_USB_R_UP;	item_is_port = true;
-		} else  if	(!strncmp(ptr, "L_DN_READ", sizeof("L_DN_READ"))) {
+		} else  if	(!strncmp(ptr, "L_DN_READ", sizeof("L_DN_READ")-1)) {
 			item = ITEM_USB_L_DN;	item_is_port = false;
-		} else  if	(!strncmp(ptr, "L_UP_READ", sizeof("L_UP_READ"))) {
+		} else  if	(!strncmp(ptr, "L_UP_READ", sizeof("L_UP_READ")-1)) {
 			item = ITEM_USB_L_UP;	item_is_port = false;
-		} else  if	(!strncmp(ptr, "R_DN_READ", sizeof("R_DN_READ"))) {
+		} else  if	(!strncmp(ptr, "R_DN_READ", sizeof("R_DN_READ")-1)) {
 			item = ITEM_USB_R_DN;	item_is_port = false;
-		} else  if	(!strncmp(ptr, "R_UP_READ", sizeof("R_UP_READ"))) {
+		} else  if	(!strncmp(ptr, "R_UP_READ", sizeof("R_UP_READ")-1)) {
 			item = ITEM_USB_R_UP;	item_is_port = false;
 		} else {
-			info ("err : unknown msg! %s\n", ptr);
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 		/* resp msg : [status, get_speed-read mb/s */

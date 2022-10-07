@@ -224,9 +224,9 @@ int system_test_func (char *msg, char *resp_msg)
 
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
-		if			(!strncmp(ptr, "MEM", sizeof("MEM"))) {
+		if			(!strncmp(ptr, "MEM", sizeof("MEM")-1)) {
 			sprintf (resp_msg, "%d,%d GB", 1, client_system.mem_size); 
-		} else if	(!strncmp(ptr, "LCD", sizeof("LCD"))) {
+		} else if	(!strncmp(ptr, "LCD", sizeof("LCD")-1)) {
 			bool status;
 			if ((client_system.fb_x != client_system.lcd_x) ||
 				(client_system.fb_y != client_system.lcd_y))
@@ -247,7 +247,7 @@ int system_test_func (char *msg, char *resp_msg)
 						client_system.eth_info.link_speed ? 1 : 0,
 						client_system.eth_info.link_speed);
 		} else {
-			info ("err : unknown msg! %s\n", ptr);
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 		info ("msg = %s, resp = %s\n", msg, resp_msg);

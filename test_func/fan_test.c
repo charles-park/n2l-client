@@ -64,14 +64,14 @@ int fan_test_func (char *msg, char *resp_msg)
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
 
-		if      	(!strncmp(ptr, "ON", sizeof("ON"))) {
+		if      	(!strncmp(ptr, "ON", sizeof("ON")-1)) {
 			fan.status = true;
 			ret = fwrite_bool (fan.fname, fan.status);
-		} else if 	(!strncmp(ptr, "OFF", sizeof("OFF"))) {
+		} else if 	(!strncmp(ptr, "OFF", sizeof("OFF")-1)) {
 			fan.status = false;
 			ret = fwrite_bool (fan.fname, fan.status);
 		} else {
-			err ("unknown msg! %s\n", ptr);
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 		/* resp msg : [status, control status] */

@@ -124,19 +124,19 @@ int adc_test_func (char *msg, char *resp_msg)
 	if ((ptr = strtok (msg_clone, ",")) != NULL) {
 		ptr = toupperstr(ptr);
 
-		if      (!strncmp(ptr, "ADC_37", sizeof("ADC_37"))) {
+		if      (!strncmp(ptr, "ADC_37", sizeof("ADC_37")-1)) {
 			item = ADC_37;	item_is_mv = false;
 		}
-		else if (!strncmp(ptr, "ADC_40", sizeof("ADC_40"))) {
+		else if (!strncmp(ptr, "ADC_40", sizeof("ADC_40")-1)) {
 			item = ADC_40;	item_is_mv = false;
 		}
-		else if (!strncmp(ptr, "ADC_37_MV", sizeof("ADC_37_MV"))) {
+		else if (!strncmp(ptr, "ADC_37_MV", sizeof("ADC_37_MV")-1)) {
 			item = ADC_37;	item_is_mv = true;
 		}
-		else if (!strncmp(ptr, "ADC_40_MV", sizeof("ADC_40_MV"))) {
+		else if (!strncmp(ptr, "ADC_40_MV", sizeof("ADC_40_MV")-1)) {
 			item = ADC_40;	item_is_mv = true;
 		} else {
-			info ("err : unknown msg! %s\n", ptr);
+			info ("%s : msg unknown %s\n", __func__,  ptr);
 			return -1;
 		}
 
