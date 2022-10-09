@@ -14,7 +14,7 @@ project/n2l/ubuntu-22.04-4.9-minimal-odroid-n2l-20220913.img
 3. apt install build-essential git overlayroot vim ssh
 4. odroid-tweaks[3088]: /bin/odroid-tweaks: line 8: [file disable]
 5. /media/boot/config.ini -> overlays all disable
-6. /media/boot/config.ini -> hdmi (1080p설정), EDID 참조: https://en.wikipedia.org/wiki/Extended_Display_Identification_Data 
+6. /media/boot/config.ini -> hdmi (800x480p60hz설정), EDID 참조: https://en.wikipedia.org/wiki/Extended_Display_Identification_Data 
 7. /media/boot/boot.ini -> disable console (ttyS0)
 8. git clone https://github.com/charles-park/n2l-client
 9. project build : make
