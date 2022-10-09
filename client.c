@@ -236,7 +236,7 @@ void recv_msg_parse (struct client_t *pclient, char *resp_msg)
 
 	switch (status)
 	{
-		case	1:	resp_cmd = 'F';		break;	/* Fail */
+		case	1:	resp_cmd = 'E';		break;	/* Error */
 		case	0:	resp_cmd = 'O';		break;	/* Okay */
 		default	:	resp_cmd = 'B';		break;	/* Busy */
 	}
