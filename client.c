@@ -220,8 +220,14 @@ void recv_msg_parse (struct client_t *pclient, char *resp_msg)
 		if (!strncmp(group, "BOOT", sizeof("BOOT") -1))
 			pclient->is_connect = true;
 
-		info ("Server and Client connection yet...\n");
+		info ("Server and Client connection yet... %d, %s\n", pclient->is_connect, group);
 		return;
+	} else {
+		if (!strncmp(group, "REBOOT", sizeof("REBOOT") -1) && pclient->is_connect) {
+			pclient->is_connect = false;
+			info ("Server Reset... Server to Client disconnect...\n");
+			return;
+		}
 	}
 
 	// test func run
