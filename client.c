@@ -153,6 +153,7 @@ int app_init (struct client_t *pclient)
 				err ("uart0 protocol install fail");
 				exit(0);
 			}
+			protocol_msg_send (pclient->puart, 'P', "001", "1,BOOT");
 		}
 	}
 	info ("---------------------------------\n");
