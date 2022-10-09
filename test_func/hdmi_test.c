@@ -17,6 +17,9 @@
 //------------------------------------------------------------------------------
 #define HDMI_HPD_FILENAME	"/sys/class/amhdmitx/amhdmitx0/hpd_state"
 #define	HDMI_EDID_FILENAME	"/sys/class/amhdmitx/amhdmitx0/rawedid"
+//
+// https://en.wikipedia.org/wiki/Extended_Display_Identification_Data
+//
 #define	HDMI_EDID_PASS		"00ffffffffffff00"
 
 #define	HDMI_HPD	0
@@ -53,11 +56,14 @@ void hdmi_test_init (void)
 	}
 
 	if (access (hdmi[HDMI_EDID].fname, R_OK) == 0) {
-		char	rdata[20];
+		char	rdata[64];
 		if (!fread_line (hdmi[HDMI_EDID].fname, rdata, sizeof(rdata))) {
 			// HDMI_EDID_PASS string is edid pass.
-			if (!strncmp(rdata, HDMI_EDID_PASS, sizeof(HDMI_EDID_PASS)-1))
-				hdmi[HDMI_EDID].status = true;
+			if (!strncmp(rdata, HDMI_EDID_PASS, sizeof(HDMI_EDID_PASS)-1)) {
+				/* HDMI EDID Version check 1.3 or 1.4 */
+				if ((rdata[37] == '1') && ((rdata[39] == '3') || (rdata[39] == '4')))
+					hdmi[HDMI_EDID].status = true;
+			}
 		}
 	}
 	info ("HPD  filename = %s, access = %d\n",
