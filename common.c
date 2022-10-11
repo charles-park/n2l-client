@@ -30,10 +30,9 @@ char *remove_space_str (char *str)
 {
 	int len = strlen(str);
 
-	if (*str == 0x20)
-		while ((*str++ != 0x20) && len--)
+	while ((*str++ == 0x20) && len--)
 
-	return	str;
+	return	str -1;
 }
 
 //------------------------------------------------------------------------------
@@ -41,14 +40,13 @@ char *tolowerstr (char *str)
 {
 	int i, len = strlen(str);
 
-	if (*str == 0x20)
-		while ((*str++ != 0x20) && len--);
+	while ((*str++ == 0x20) && len--);
 
 	for (i = 0; i < len; i++, str++)
 		*str = tolower(*str);
 
 	/* calculate input string(*str) start pointer */
-	return	(str -len);
+	return	(str -len -1);
 }
 
 //------------------------------------------------------------------------------
@@ -56,14 +54,13 @@ char *toupperstr (char *str)
 {
 	int i, len = strlen(str);
 
-	if (*str == 0x20)
-		while ((*str++ != 0x20) && len--);
+	while ((*str++ == 0x20) && len--);
 
 	for (i = 0; i < len; i++, str++)
 		*str = toupper(*str);
 
 	/* calculate input string(*str) start pointer */
-	return	(str -len);
+	return	(str -len -1);
 }
 
 //------------------------------------------------------------------------------
