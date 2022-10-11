@@ -117,7 +117,7 @@ int fwrite_bool (char *filename, char status)
 		fclose(fp);
 	}
 
-	info ("rdata = %c, fan.enable = %c\n", rdata, status + '0');
+	info ("rdata = %c, status = %c\n", rdata, status + '0');
 	
 	return	(rdata != (status + '0')) ? false : true;
 }
