@@ -45,13 +45,17 @@ void *audio_test_thread (void *arg)
 			paudio->is_busy = true;
 			pthread_mutex_unlock(&paudio->mutex);
 
-			memset (cmd, 0x00, sizeof(cmd));
-			sprintf (cmd, "aplay -Dhw:0,1 %s -d %d && sync", paudio->filename, paudio->play_time);
-			if (NULL == (fp = popen(cmd, "r")))	{
-				err("popen() error!\n");
-				exit(1);
+			if (!strncmp("sleep", paudio->filename, strlen("sleep")-1))
+				sleep(paudio->play_time);
+			else {
+				memset (cmd, 0x00, sizeof(cmd));
+				sprintf (cmd, "aplay -Dhw:0,1 %s -d %d && sync", paudio->filename, paudio->play_time);
+				if (NULL == (fp = popen(cmd, "r")))	{
+					err("popen() error!\n");
+					exit(1);
+				}
+				pclose(fp);
 			}
-			pclose(fp);
 
 			pthread_mutex_lock(&paudio->mutex);
 			paudio->enable = false;		paudio->is_busy = false;
@@ -79,18 +83,22 @@ int audio_test_func (char *msg, char *resp_msg)
 			ptr = toupperstr(ptr);
 
 			memset (audio.filename, 0x00, sizeof (audio.filename));
-			if			(!strncmp(ptr, "L_CH", sizeof("L_CH")-1)) {
+			if			(!strncmp(ptr, "L_CH_ON", sizeof("L_CH_ON")-1)) {
 				if (access (audio.lch_fname, R_OK)) {
 					err ("%s not found.\n", audio.lch_fname);
 					return -1;
 				}
 				sprintf (audio.filename, "%s", audio.lch_fname);
-			} else if 	(!strncmp(ptr, "R_CH", sizeof("R_CH")-1)) {
+			} else if 	(!strncmp(ptr, "R_CH_ON", sizeof("R_CH_ON")-1)) {
 				if (access (audio.rch_fname, R_OK)) {
 					err ("%s not found.\n", audio.rch_fname);
 					return -1;
 				}
 				sprintf (audio.filename, "%s", audio.rch_fname);
+			} else if 	(!strncmp(ptr, "L_CH_OFF", sizeof("L_CH_OFF")-1)) {
+				sprintf (audio.filename, "%s", "sleep");
+			} else if 	(!strncmp(ptr, "R_CH_OFF", sizeof("R_CH_OFF")-1)) {
+				sprintf (audio.filename, "%s", "sleep");
 			}	else {
 				info ("%s : msg unknown %s\n", __func__,  ptr);
 				return -1;
