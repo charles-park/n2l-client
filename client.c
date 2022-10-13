@@ -71,6 +71,7 @@ struct client_t {
 void 	test_func_init 		(void);
 void 	test_func_exit 		(void);
 int 	test_func_run 		(struct client_t *pclient, char *group, char *msg, char *resp_msg);
+void 	r_delay_load 		(struct client_t *pclient);
 int 	app_init 			(struct client_t *pclient) ;
 void 	app_exit 			(struct client_t *pclient);
 void 	ui_item_update 		(struct client_t *pclient, int uid, bool is_info, char *resp_msg);
@@ -180,7 +181,7 @@ int app_init (struct client_t *pclient)
 	{
 		int i;
 		for (i = 0; i < pclient->r_delay_cnt; i++) {
-			info ("R_DELAY GROUP = %s, Delay ms = %d\n",
+			info ("R_DELAY GROUP = %s, Delay uSec = %d\n",
 				pclient->r_delay[i].group, pclient->r_delay[i].mdelay);
 		}
 	}
@@ -294,7 +295,7 @@ void recv_msg_parse (struct client_t *pclient, char *resp_msg)
 		int i;
 		for (i = 0; i < pclient->r_delay_cnt; i++) {
 			if (!strncmp(pclient->r_delay[i].group, group, strlen(pclient->r_delay[i].group)-1)) {
-				info ("R_DELAY GROUP %s, Delay ms %d\n",
+				info ("R_DELAY GROUP %s, Delay uSec %d\n",
 						pclient->r_delay[i].group, pclient->r_delay[i].mdelay);
 				usleep(pclient->r_delay[i].mdelay);
 			}
