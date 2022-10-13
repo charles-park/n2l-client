@@ -150,12 +150,15 @@ int fwrite_str (char *filename, char *wstr)
 int find_appcfg_data (char *fkey, char *fdata)
 {
 	FILE *fp;
-	char read_line[256], *ptr;
-	bool appcfg = false;
-	int count = 0;
+	char read_line[128], *ptr;
+	bool appcfg = false, multiline = false;
+	int cmd_cnt = 0, pos = 0;;
 	if (access (CONFIG_APP_FILE, R_OK) == 0) {
 		if ((fp = fopen (CONFIG_APP_FILE, "r")) != NULL) {
 			memset (read_line, 0x00, sizeof(read_line));
+			if (!strncmp ("R_DELAY", fkey, sizeof("R_DELAY")-1))
+				multiline = true;
+
 			while (fgets(read_line, sizeof(read_line), fp) != NULL) {
 
 				if (!appcfg) {
@@ -170,10 +173,15 @@ int find_appcfg_data (char *fkey, char *fdata)
 						ptr = ptr +1;
 						while ((ptr != NULL) && (*ptr == ' '))	ptr++;
 
-						strncpy (fdata, ptr, strlen (ptr) -1);
+						pos = cmd_cnt * sizeof(read_line);
+						strncpy(&fdata[pos], ptr, strlen (ptr) -1);
+
+						if (multiline)	cmd_cnt++;
+						else {
+							fclose (fp);
+							return 0;
+						}
 						//info ("%s : (%d) %s\n", __func__, (int)strlen(fdata), fdata);
-						fclose (fp);
-						return 0;
 					}
 				}
 				memset (read_line, 0x00, sizeof(read_line));

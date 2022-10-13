@@ -37,6 +37,14 @@
 
 //#define	UART_MSG_TEST
 //------------------------------------------------------------------------------
+/* response delay : adc를 사용하는 test func의 경우 일정시간 뒤어 응답을 전송하도록 조치함 */
+#define	R_DELAY_GROUP_MAX	10
+
+typedef struct r_delay__t {
+	char	group[16];
+	int		mdelay;
+}	r_delay_t;
+
 struct client_t {
 	// connect to server ???
 	bool		is_connect;
@@ -50,6 +58,9 @@ struct client_t {
 	ui_grp_t	*pui;
 	ptc_grp_t	*puart;
 	char		recv_msg[RECEIVE_MSG_SIZE];
+
+	char		r_delay_cnt;
+	r_delay_t	r_delay[R_DELAY_GROUP_MAX];
 
 	int			alive_r_item;
 };
@@ -108,6 +119,34 @@ int test_func_run (struct client_t *pclient, char *group, char *msg, char *resp_
 }
 
 //------------------------------------------------------------------------------
+void r_delay_load (struct client_t *pclient)
+{
+	char cfg_line[128], *ptr;
+	char cfgs[128 * R_DELAY_GROUP_MAX];
+
+	memset (cfgs, 0x00, sizeof(cfgs));
+	find_appcfg_data ("R_DELAY",  cfgs);
+
+	for (	pclient->r_delay_cnt = 0;
+			pclient->r_delay_cnt < R_DELAY_GROUP_MAX;
+			pclient->r_delay_cnt++)	{
+
+		memset (cfg_line, 0x00, sizeof(cfg_line));
+		memcpy (cfg_line, &cfgs[pclient->r_delay_cnt * sizeof(cfg_line)], sizeof(cfg_line));
+
+		if (cfg_line[0] != 0x00) {
+			ptr = toupperstr(strtok (cfg_line, ","));
+			if (ptr == NULL)	continue;
+			strncpy (pclient->r_delay[pclient->r_delay_cnt].group, ptr, strlen(ptr));
+
+			ptr = strtok (NULL, ",");
+			if (ptr == NULL)	continue;
+			pclient->r_delay[pclient->r_delay_cnt].mdelay = atoi(ptr) * 1000;
+		}
+		else	break;
+	}
+}
+
 //------------------------------------------------------------------------------
 int app_init (struct client_t *pclient) 
 {
@@ -130,11 +169,21 @@ int app_init (struct client_t *pclient)
 			pclient->alive_r_item = ALIVE_DISPLAY_R_ITEM;
 		else
 			pclient->alive_r_item = atoi(int_str);
+
+		r_delay_load (pclient);
 	}
 	info ("CLIENT_FB_DEVICE     = %s\n", pclient->fb_dev);
 	info ("CLIENT_UART_DEVICE   = %s\n", pclient->uart_dev);
 	info ("CLIENT_UI_CONFIG     = %s\n", pclient->ui_config);
 	info ("ALIVE_DISPLAY_R_ITEM = %d\n", pclient->alive_r_item);
+	info ("R_DELAY_COUNT        = %d\n", pclient->r_delay_cnt);
+	{
+		int i;
+		for (i = 0; i < pclient->r_delay_cnt; i++) {
+			info ("R_DELAY GROUP = %s, Delay ms = %d\n",
+				pclient->r_delay[i].group, pclient->r_delay[i].mdelay);
+		}
+	}
 
 	pclient->pfb	= fb_init 	(pclient->fb_dev);
 	pclient->pui	= ui_init	(pclient->pfb, pclient->ui_config) ;
@@ -241,6 +290,16 @@ void recv_msg_parse (struct client_t *pclient, char *resp_msg)
 		default	:	resp_cmd = 'E';		break;	/* Busy */
 	}
 
+	{
+		int i;
+		for (i = 0; i < pclient->r_delay_cnt; i++) {
+			if (!strncmp(pclient->r_delay[i].group, group, strlen(pclient->r_delay[i].group)-1)) {
+				info ("R_DELAY GROUP %s, Delay ms %d\n",
+						pclient->r_delay[i].group, pclient->r_delay[i].mdelay);
+				usleep(pclient->r_delay[i].mdelay);
+			}
+		}
+	}
 	/* response to server */
 	protocol_msg_send (pclient->puart, resp_cmd, uid, resp_msg);
 	memset (pclient->recv_msg, 0x00, sizeof(pclient->recv_msg));
