@@ -134,6 +134,10 @@ int storage_test_func (char *msg, char *resp_msg)
 			return -1;
 		}
 		storage[item].status = storage[item].speed > storage[item].check_speed ? 1 : 0;
+		if (!storage[item].status) {
+			storage_test_init ();
+			storage[item].status = storage[item].speed > storage[item].check_speed ? 1 : 0;
+		}
 		sprintf (resp_msg, "%d,%d MB/s", storage[item].status, storage[item].speed); 
 		info ("msg = %s, resp = %s\n", msg, resp_msg);
 		return	0;
