@@ -14,7 +14,9 @@ project/n2l/ubuntu-22.04-4.9-minimal-odroid-n2l-20220913.img
 3. apt install build-essential git overlayroot vim ssh
 4. odroid-tweaks[3088]: /bin/odroid-tweaks: line 8: [file disable]
 5. /media/boot/config.ini -> overlays all disable
-6. /media/boot/config.ini -> hdmi (800x480p60hz설정), EDID 참조: https://en.wikipedia.org/wiki/Extended_Display_Identification_Data 
+6. /media/boot/config.ini -> hdmi (800x480p60hz설정), EDID 참조: https://en.wikipedia.org/wiki/Extended_Display_Identification_Data   
+   screen off disable (setterm -blank 0 -powerdown 0 -powersave off 2>/dev/null, echo 0 > /sys/class/graphics/fb0/blank)   
+   vi ~/.bashrc (반드시 실행되는 터미널의 bashrc를 수정하여야 함) https://wiki.odroid.com/odroid-n2/ubuntu_minimal_quick_guide#disable_screen_blank   
 7. /media/boot/boot.ini -> disable console (ttyS0)
 8. git clone https://github.com/charles-park/n2l-client
 9. project build : make
