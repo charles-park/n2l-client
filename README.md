@@ -11,7 +11,7 @@ project/n2l/ubuntu-22.04-4.9-minimal-odroid-n2l-20220913.img
 2. systemctl edit getty@tty1.service (auto login)
     [Service] ExecStart= ExecStart=-/sbin/agetty --noissue --autologin root %I $TERM Type=idle  
     save exit [Ctrl+ k, Ctrl + q]
-3. apt install build-essential git overlayroot vim ssh
+3. apt install build-essential git overlayroot vim ssh minicom
 4. odroid-tweaks[3088]: /bin/odroid-tweaks: line 8: [file disable]
 5. /media/boot/config.ini -> overlays all disable
 6. /media/boot/config.ini -> hdmi (800x480p60hz설정), EDID 참조: https://en.wikipedia.org/wiki/Extended_Display_Identification_Data   
@@ -22,7 +22,7 @@ project/n2l/ubuntu-22.04-4.9-minimal-odroid-n2l-20220913.img
 9. project build : make
 10. service install : n2l-client/service/install.sh
 11. emmc resize : ubuntu pc used disk util (4608 MB)
-12. image dump : dd if=/dev/sda of=./odroid-n2l-client.img bs=512M count=10
+12. image dump : dd if=/dev/sda of=./odroid-n2l-client.img bs=512M count=9
 13. test image
 14. overlay enable
 ```
@@ -45,16 +45,17 @@ overlayroot="tmpfs"
 ```
 15. overlay modified/disable  
 ```
-overlayroot.conf 파일의 overlayroot=”tmpfs”를 overlayroot=””로 변경합니다.
-vi /etc/overlayroot.conf
-overlayroot_cfgdisk="disabled"
-overlayroot=""
 [get write permission]
 odroid@hirsute-server:~$ sudo overlayroot-chroot 
 INFO: Chrooting into [/media/root-ro]
 root@hirsute-server:/# 
 
 [disable overlayroot]
+overlayroot.conf 파일의 overlayroot=”tmpfs”를 overlayroot=””로 변경합니다.
+vi /etc/overlayroot.conf
+overlayroot_cfgdisk="disabled"
+overlayroot=""
+
 ```
 16. final image dump  
 
